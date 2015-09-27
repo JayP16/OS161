@@ -1,0 +1,71 @@
+marks for Assignment 2
+======================
+
+Page Fault Handling - lpage_fault             20  / 20   
+--------------------------------------
+    - handles fault on valid page
+      - page marked dirty for write or read-only faults
+      --> runs in-core test (e.g. testbin/palin)   
+    - handles fault on invalid page
+      - page frame allocated
+      - page read in from swap
+  
+  Comments:    
+
+
+Page eviction - do_evict / lpage_evict        20  / 20
+--------------------------------------------
+    - frees/invalidates evicted page
+      - lpage marked invalid
+      - TLB entry invalidated (if one exists)
+      - page frame marked free in coremap
+      --> runs noreuse test with LRU replacement
+    - dirty pages written to swap
+      --> runs matmult, sort
+    - clean pages not written again
+      --> counts of discarded and written pages (shown by "kh" command
+      after running sort or matmult) are sensible
+
+  Comments:
+
+
+Page replacement - SEQUENTIAL                      2 / 10
+------------------------------
+    - coremap entry selected with sequential scan
+    - will not replace kernel or pinned pages
+    - handles impossible (error) cases
+      - will not loop forever
+
+  Comments:
+circular list
+the implemented algorithm is not actually sequential/
+
+Page replacement - RANDOM                         10  / 10
+---------------------------
+    - coremap entry selected random
+    - will not replace kernel or pinned pages
+    - handles impossible (error) cases
+      - will not loop forever
+
+  Comments:
+
+
+
+Synchronization                                10  / 10
+-------------------
+    - runs concurrent test programs without apparent deadlock
+      (sort + matmult, sort + matmult + huge, started from menu)
+    - visual inspection of the code appears to be following 
+      correct lock discipline
+
+  Comments:
+
+Code Review and Interview                                     8 / 10
+-------------------
+    - clean, well-commented and readable code
+    - reasonable explanation of design from in-person code review.
+
+===============================================================================
+
+Total                                           70 / 80
+

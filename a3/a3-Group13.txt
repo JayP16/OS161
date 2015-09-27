@@ -1,0 +1,49 @@
+A3 Marks for Group 13
+
+SYSTEM CALLS						-- 34 / 60
+-----------------
+
+  filetable design/setup/cleanup:
+    - initialization called during runprogram
+      (only user processes need filetables)                      3 / 3
+    - proper cleanup on file close and   
+      filetable_destroy (called when thread exits)               1 / 3
+    - supports proper sharing of open files for dup2 and       
+      fork (e.g. locking and reference counting) 	         3 / 5
+    - includes some form of filetable_copy for fork	         0 / 4
+
+  System calls are evaluated on:
+  1) ability to pass badcall tests
+     - proper handling of user pointers and checking for
+       bad file descriptors, etc. is checked by these tests
+  2) proper cleanup before either normal or error return
+  3) correct behavior when used correctly (psh tests)
+
+  open 	 						3 / 3
+  close 						2 / 3
+  dup2 							2 / 3
+  read 							3 / 3
+  write 						3 / 3
+  lseek 						2 / 3
+  chdir 						3 / 3
+  getcwd 						2 / 3
+  fstat 						2 / 3
+  getdirentry 						0 / 3
+
+SFS Getdirectory(optional):
+   Correct implementation of sfs_getdirentry()                   0 / 4
+    (keeps track of offset for next direntry, skips empty
+     entries, copies back name part only, correct locking)
+   Correct modification of sfs_dirops to call sfs_getdirentry    0 / 1
+
+SFS inode data inlining(optional)
+   Correct recalculation of file block for reading/writing       0 / 3
+   Marks inode dirty when data part is modified (does not 
+     write inode back immediately when data part is modified)    0 / 1
+   Correct changes to truncate file                              0 / 1
+
+Design Document(5):
+
+well-organized, generally correct grammar                       1 / 1
+explains key issues, and is relatively complete                 2 / 2
+was able to describe the code well                              2 / 2

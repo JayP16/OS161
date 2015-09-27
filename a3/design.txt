@@ -1,0 +1,61 @@
+IMPLEMENTED/FUNCTIONAL LIST:
+
+-OPEN FILE TABLE: (X) Implemented, functional. fork() semantics support.
+-SYSTEM CALLS: (X)
+    OPEN: (X) Implemented, functional.
+    CLOSE: (X) I, f.
+    DUP2: (X) I, f.
+    READ: (X) I,f.
+    WRITE: (X) I,f.
+    LSEEK: (X) I,f.
+    CHDIR: (X) I,f.
+    GETCWD: (X) I,f.
+    FSTAT: (X) I,f.
+    GETDIRENTRY: (X) I,f.
+
+-------------------------------------------------------------
+
+Explain how your open file table design supports the fork semantics.
+
+
+Our file table design supports the fork semantics by giving a copy of the parent thread's table 
+to the child thread. In order to use it as an element of file table, we created filedesc struct that
+contains vnode, offset, flags and dup count. Basically, our file table is an array of the filedesc
+struct. Therefore, when we make a copy of parent thread's file table, we just give pointers to the 
+child thread. This design enables multiple threads to share one vnode for one file.
+
+-------------------------------------------------------------
+
+Implementation of sfs_getdirentry.
+
+sfs_mkdir - Look up the given name in the parent directory, and make sure
+an entry does not exist. Create a new directory entry in the given parent
+directory's vnode, and initialize the first two entries in the newly created
+directory and ensure that the new entries are linked appropriately to
+itself and its parent directory. In addition, increment the linkcount of the
+parent directory and set the linkcount of the new subdirectory to 1.
+
+sfs_rmdir - First, check that the name argument is not "." or "..", and then
+look up the directory to be removed and check that it is empty before moving on
+with removing the directory. This is done by counting the number of used slots.
+"." and ".." will take up 2 slots, and if the number of used slots is greater
+than 2, then the directory is not empty. Prior to unlinking the directory entry,
+the ".." directory is unlinked and the linkcount for the parent directory is
+decremented. Finally, unlink the targeted directory entry from the parent directory.
+
+-------------------------------------------------------------
+
+
+Discuss the single biggest challenge you had to address for the assignment
+
+The most difficult challenge we had to address for this assignment was 
+code reading. This assignment dealt with a larger system of code and 
+structures arguably unlike previous assignments. Much of the work of this
+assignment was going through the code and understanding how the filesystem
+goes together. Although we obviously ran into issues in coding and debugging,
+that was relatively more timeconsuming than challenging. Semantics of a large
+interconnected system can easily become complicated so this assignment was 
+good practice working with a large system while trying not to ruin the overall
+semantics. 
+-------------------------------------------------------------
+
